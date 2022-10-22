@@ -23,3 +23,10 @@ class LinkedInScrapper(webdriver.Chrome):
             by='css selector',
             value='a[data-tracking-control-name="guest_homepage-basic_guest_nav_menu_jobs"]')
         jobs_element.click()
+
+    def select_jobs_or_companies(self,name):
+        search_jobs_element = self.find_element(
+            by='css selector',
+            value='input[name="keywords"]'
+        )
+        search_jobs_element.send_keys(name)
