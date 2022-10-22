@@ -5,3 +5,4 @@ from linkedin import LinkedInScrapper
 # bot.landing_page()
 with LinkedInScrapper() as bot:
     bot.landing_page()
+    bot.jobs_page()
