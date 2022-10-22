@@ -1,8 +1,6 @@
 from linkedin import LinkedInScrapper
 
-
-# bot = LinkedInScrapper()
-# bot.landing_page()
 with LinkedInScrapper() as bot:
     bot.landing_page()
     bot.jobs_page()
+    bot.select_jobs_or_companies('web developer')
