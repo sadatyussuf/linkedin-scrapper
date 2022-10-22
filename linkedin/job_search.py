@@ -18,3 +18,8 @@ class LinkedInScrapper(webdriver.Chrome):
     def landing_page(self):
         self.get(const.BASE_URL)
 
+    def jobs_page(self):
+        jobs_element = self.find_element(
+            by='css selector',
+            value='a[data-tracking-control-name="guest_homepage-basic_guest_nav_menu_jobs"]')
+        jobs_element.click()
