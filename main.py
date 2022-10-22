@@ -1,11 +1,7 @@
-import os
-from selenium import webdriver
-
-driver_path = r'C:\SeleniumDrivers'
-os.environ['PATH'] += driver_path
+from linkedin import LinkedInScrapper
 
 
-
-driver = webdriver.Chrome()
-
-driver.get('https://www.linkedin.com/')
+# bot = LinkedInScrapper()
+# bot.landing_page()
+with LinkedInScrapper() as bot:
+    bot.landing_page()
