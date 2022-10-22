@@ -5,3 +5,4 @@ with LinkedInScrapper() as bot:
     bot.jobs_page()
     bot.select_jobs_or_companies('web developer')
     bot.search_locations('Ghana')
+    bot.search_submit()
