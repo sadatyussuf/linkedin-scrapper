@@ -40,4 +40,11 @@ class LinkedInScrapper(webdriver.Chrome):
         search_location_element.clear()
         search_location_element.send_keys(location_name)
 
+    def search_submit(self):
+        search_submit_element = self.find_element(
+            by='css selector',
+            value='button[data-tracking-control-name="public_jobs_jobs-search-bar_base-search-bar-search-submit"]'
+        )
+        search_submit_element.click()
+
 
