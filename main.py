@@ -6,3 +6,4 @@ with LinkedInScrapper() as bot:
     bot.select_jobs_or_companies('web developer')
     bot.search_locations('Ghana')
     bot.search_submit()
+    bot.select_experience_level('Internship','Entry')
