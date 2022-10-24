@@ -2,7 +2,7 @@ import os
 from selenium import webdriver
 
 import linkedin.constants as const
-
+from linkedin.job_report import JobResults
 
 class LinkedInScrapper(webdriver.Chrome):
     def __init__(self, drive_path=r"C:\SeleniumDrivers", closed=False):
@@ -79,3 +79,12 @@ class LinkedInScrapper(webdriver.Chrome):
             value='button[data-tracking-control-name="public_jobs_f_E"]'
         )
         submit_element.click()
+
+    def job_results(self, results_num:int=20):
+        results_container = self.find_element(
+            by='css selector',
+            value='#main-content'
+        )
+
+        results = JobResults(results_container,results_num)
+        results.get_results()
