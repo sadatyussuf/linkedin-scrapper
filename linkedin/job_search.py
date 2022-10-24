@@ -4,6 +4,7 @@ from selenium import webdriver
 import linkedin.constants as const
 from linkedin.job_report import JobResults
 
+
 class LinkedInScrapper(webdriver.Chrome):
     def __init__(self, drive_path=r"C:\SeleniumDrivers", closed=False):
         self.drive_path = drive_path
@@ -18,6 +19,32 @@ class LinkedInScrapper(webdriver.Chrome):
 
     def landing_page(self):
         self.get(const.BASE_URL)
+
+    def login_parameters(self, username, password):
+
+        sign_in_element = self.find_element(
+            by='css selector',
+            value='a[data-tracking-control-name="guest_homepage-basic_nav-header-signin"]'
+        )
+        sign_in_element.click()
+
+        username_element = self.find_element(
+            by='css selector',
+            value='#username'
+        )
+        password_element = self.find_element(
+            by='css selector',
+            value='#password'
+        )
+
+        username_element.send_keys(username)
+        password_element.send_keys(password)
+
+        submit_element = self.find_element(
+            by='css selector',
+            value='button[data-litms-control-urn="login-submit"]'
+        )
+        submit_element.click()
 
     def jobs_page(self):
         jobs_element = self.find_element(
@@ -80,11 +107,11 @@ class LinkedInScrapper(webdriver.Chrome):
         )
         submit_element.click()
 
-    def job_results(self, results_num:int=20):
+    def job_results(self, results_num: int = 20):
         results_container = self.find_element(
             by='css selector',
             value='#main-content'
         )
 
-        results = JobResults(results_container,results_num)
+        results = JobResults(results_container, results_num)
         results.get_results()
