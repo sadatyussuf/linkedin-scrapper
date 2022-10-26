@@ -1,5 +1,6 @@
 import os
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 import linkedin.constants as const
 from linkedin.job_report import JobResults
@@ -46,6 +47,25 @@ class LinkedInScrapper(webdriver.Chrome):
         )
         submit_element.click()
 
+    def set_jobs_page(self):
+        search_element = self.find_element(
+            by='css selector',
+            value='.search-global-typeahead__input'
+        )
+        search_element.send_keys(Keys.ENTER)
+        get_all_filters = self.find_elements(
+            by='css selector',
+            value='.search-reusables__primary-filter'
+        )
+        for job_filter_pill in get_all_filters:
+            button_element = job_filter_pill.find_element(
+                by='css selector',
+                value="button"
+            )
+            button_text = str(button_element.get_attribute('innerHTML')).strip().lower()
+            if button_text == 'jobs':
+                job_filter_pill.click()
+
     def jobs_page(self):
         jobs_element = self.find_element(
             by='css selector',
@@ -55,57 +75,78 @@ class LinkedInScrapper(webdriver.Chrome):
     def select_jobs_or_companies(self, job_name):
         search_jobs_element = self.find_element(
             by='css selector',
-            value='input[name="keywords"]'
+            value='.jobs-search-box__text-input'
+            # value='input[name="keywords"]'
         )
         search_jobs_element.send_keys(job_name)
+        search_jobs_element.send_keys(Keys.ENTER)
 
     def search_locations(self, location_name):
         search_location_element = self.find_element(
             by='css selector',
-            value='input[name="location"]'
+            # value='#jobs-search-box-location-id-ember299'
+            value='input[aria-label*="City"]'
         )
         search_location_element.clear()
         search_location_element.send_keys(location_name)
+        search_location_element.send_keys(Keys.ENTER)
 
     def search_submit(self):
         search_submit_element = self.find_element(
             by='css selector',
-            value='button[data-tracking-control-name="public_jobs_jobs-search-bar_base-search-bar-search-submit"]'
+            value='.jobs-search-box__submit-button'
+            # value='button[data-tracking-control-name="public_jobs_jobs-search-bar_base-search-bar-search-submit"]'
         )
         search_submit_element.click()
 
     def select_experience_level(self, *experiece_levels):
-
-        # first, clicks the Experience_Level to bring up the pop-up for the experience_type
-        click_experience_element = self.find_element(
+        get_all_filters = self.find_elements(
             by='css selector',
-            value='button[data-tracking-control-name="public_jobs_f_E"]'
+            value='.search-reusables__primary-filter'
         )
-        click_experience_element.click()
+        print(len(get_all_filters))
+        for experience_filter_pill in get_all_filters:
+            button_element = experience_filter_pill.find_element(
+                by='css selector',
+                value="button"
+            )
+            print(f'button_element: \n {button_element}')
+            button_text = str(button_element.get_attribute('innerHTML')).strip().lower()
+            print()
+            print(f'button_text: \n {button_text}')
+            if 'experience ' in button_text:
+                print('======================= If statement =========================================')
+                print(f'button_text: \n {button_text}')
+                experience_filter_pill.click()
         # selects the sibling element with the pop-up values in them
-        select_experiece_level_element = self.find_element(
-            by='css selector',
-            value='button[data-tracking-control-name="public_jobs_f_E"] + div'
-        )
-        # selects all the Experience values
-        select_values = select_experiece_level_element.find_elements(
-            by='css selector',
-            value='.filter-values-container__filter-value'
-        )
-        # loops through all the user input experience_levels
-        for experiece_level in experiece_levels:
-            for select_value in select_values:
-                label_element = select_value.find_element(
+
+                select_experiece_level_element =  experience_filter_pill.find_element(
                     by='css selector',
-                    value='label'
+                    value='form'
+                    # value='button[data-tracking-control-name="public_jobs_f_E"] + div'
                 )
-                if experiece_level.lower() in str(label_element.get_attribute('innerHTML')).lower():
-                    select_value.click()
-        submit_element = select_experiece_level_element.find_element(
-            by='css selector',
-            value='button[data-tracking-control-name="public_jobs_f_E"]'
-        )
-        submit_element.click()
+                # selects all the Experience values
+                select_values = select_experiece_level_element.find_elements(
+                    by='css selector',
+                    value='.search-reusables__collection-values-item'
+                    # value='.filter-values-container__filter-value'
+                )
+                # loops through all the user input experience_levels
+                for experiece_level in experiece_levels:
+                    for select_value in select_values:
+                        label_element = select_value.find_element(
+                            by='css selector',
+                            value='.t-14 t-black--light t-normal'
+                            # value='label'
+                        )
+                        if experiece_level.lower() in str(label_element.get_attribute('innerHTML')).lower():
+                            select_value.click()
+                submit_element = select_experiece_level_element.find_element(
+                    by='css selector',
+                    value='button[data-control-name="filter_show_results"]'
+                    # value='button[data-tracking-control-name="public_jobs_f_E"]'
+                )
+                submit_element.click()
 
     def job_results(self, results_num: int = 20):
         results_container = self.find_element(
