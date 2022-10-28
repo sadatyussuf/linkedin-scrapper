@@ -12,12 +12,11 @@ with LinkedInScrapper() as bot:
     bot.login_parameters(my_username,my_password)
     # bot.refresh()
     bot.set_jobs_page()
-    # bot.jobs_page()
-    bot.select_jobs_or_companies('web developer')
-    bot.search_locations('Ghana')
-    bot.search_submit()
-
-    bot.select_experience_level('Internship','Entry')
+    # bot.select_jobs_or_companies('web developer')
+    # bot.search_locations('Ghana')
+    # bot.search_submit()
+    #
+    # bot.select_experience_level('Internship','Entry')
     # takes a number of the results you want
     # bot.job_results()
 
