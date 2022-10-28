@@ -53,6 +53,7 @@ class LinkedInScrapper(webdriver.Chrome):
             value='.search-global-typeahead__input'
         )
         search_element.send_keys(Keys.ENTER)
+
         get_all_filters = self.find_elements(
             by='css selector',
             value='.search-reusables__primary-filter'
@@ -63,14 +64,9 @@ class LinkedInScrapper(webdriver.Chrome):
                 value="button"
             )
             button_text = str(button_element.get_attribute('innerHTML')).strip().lower()
-            if button_text == 'jobs':
+            print(button_text)
+            if 'jobs' in button_text:
                 job_filter_pill.click()
-
-    def jobs_page(self):
-        jobs_element = self.find_element(
-            by='css selector',
-            value='a[data-tracking-control-name="guest_homepage-basic_guest_nav_menu_jobs"]')
-        jobs_element.click()
 
     def select_jobs_or_companies(self, job_name):
         search_jobs_element = self.find_element(
